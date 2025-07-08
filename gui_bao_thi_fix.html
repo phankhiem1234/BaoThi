@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gửi Bảo Thi</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Patrick Hand', cursive;
+      background-color: #fceef1;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+    }
+
+    .popup.active {
+      display: flex;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 20px;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .popup-content:hover {
+      transform: scale(1.03);
+    }
+
+    .popup-content button {
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px 20px;
+      background: #ff7fa3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #letterWrapper {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('https://i.pinimg.com/736x/04/df/f6/04dff64a8a6ad328d1746c3ee107f8a6.jpg');
+      background-size: cover;
+      background-position: center;
+      padding: 60px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #letterWrapper.turning {
+      animation: pageTurn 1s ease-in-out;
+    }
+
+    #letterContent {
+      background-color: rgba(255,255,255,0.7);
+      padding: 40px;
+      border-radius: 12px;
+      font-size: 22px;
+      line-height: 1.8;
+      color: #4b2c2c;
+    }
+
+    @keyframes pageTurn {
+      from { transform: rotateY(90deg); opacity: 0; }
+      to { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes sway {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      50% { transform: rotate(-2deg); }
+      75% { transform: rotate(1deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .rose {
+      position: relative;
+      width: 30px;
+      height: 100px;
+      animation: sway 5s infinite ease-in-out;
+      display: inline-block;
+    }
+
+    .rose .stem {
+      width: 4px;
+      height: 70px;
+      background: green;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .rose .leaf {
+      position: absolute;
+      width: 10px;
+      height: 6px;
+      background: green;
+      border-radius: 50%;
+    }
+
+    .rose .leaf.left {
+      left: -10px;
+      top: 30px;
+      transform: rotate(-30deg);
+    }
+
+    .rose .leaf.right {
+      right: -10px;
+      top: 40px;
+      transform: rotate(30deg);
+    }
+
+    .rose .flower {
+      width: 30px;
+      height: 30px;
+      background: crimson;
+      border-radius: 50% 50% 50% 50%;
+      margin: 0 auto;
+      top: -10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .rose-field {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+      text-align: center;
+      background: linear-gradient(to top, #b2e6a6, transparent);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="welcomePopup" class="popup active">
+    <div class="popup-content">
+      <p>Xin chào đóa hoa xinh đẹp của anh 🌸<br><br> Nguyễn Lê Bảo Thi💗</p>
+      <button onclick="startLetter()">Bắt đầu</button>
+    </div>
+  </div>
+
+  <div id="letterWrapper">
+    <div id="letterContent">
+      <p>
+        Gửi em,<br><br>
+        Viết cho em không chỉ là một cách để nói, mà là cách để trái tim anh được lắng nghe và hiểu hơn về em. Hôm nay nhân dịp 8/7 ngày Tỏ tình Quốc tế. <br><br> Anh chỉ muốn nói là: "Anh yêu em nhiều lắm!"<br><br>
+        _______________________________<br><br>
+        <em>Anh xin hứa sẽ yêu em bằng tất cả những gì dịu dàng nhất trong anh...</em><br><br> Phan Khiem
+      </p>
+      <button onclick="closeLetter()">Đóng thư</button>
+    </div>
+  </div>
+
+  <div id="finalPopup" class="popup">
+    <div class="popup-content">
+      <p>Lời chúc cuối cùng dành cho em 💖</p>
+      <p>Chúc em luôn rạng rỡ như ánh nắng, và mãi là đóa hoa xinh đẹp trong tim anh!<br>Phan Khiem</p>
+      <button onclick="document.getElementById('finalPopup').classList.remove('active')">Kết thúc</button>
+    </div>
+  </div>
+
+  <div class="rose-field">
+    <script>
+      const roseField = document.currentScript.parentElement;
+      const colors = ['crimson', 'deeppink', 'hotpink', 'lightcoral', 'red', 'tomato'];
+      for (let i = 0; i < 200; i++) {
+        const rose = document.createElement('div');
+        rose.className = 'rose';
+
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        flower.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        const stem = document.createElement('div');
+        stem.className = 'stem';
+
+        const leafL = document.createElement('div');
+        leafL.className = 'leaf left';
+
+        const leafR = document.createElement('div');
+        leafR.className = 'leaf right';
+
+        stem.appendChild(leafL);
+        stem.appendChild(leafR);
+
+        rose.appendChild(flower);
+        rose.appendChild(stem);
+
+        roseField.appendChild(rose);
+      }
+    </script>
+  </div>
+
+  <script>
+    function startLetter() {
+      document.getElementById('welcomePopup').classList.remove('active');
+      const letter = document.getElementById('letterWrapper');
+      letter.classList.add('turning');
+      letter.style.display = 'block';
+    }
+
+    function closeLetter() {
+      document.getElementById('letterWrapper').style.display = 'none';
+      document.getElementById('finalPopup').classList.add('active');
+    }
+  </script>
+</body>
+</html>
